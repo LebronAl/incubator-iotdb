@@ -90,12 +90,18 @@ public class Timer {
     RAFT_SENDER_SERIALIZE_LOG(
         RAFT_MEMBER_SENDER, "serialize logs", TIME_SCALE, true,
         RAFT_SENDER_SEND_LOG_TO_FOLLOWERS),
+    RAFT_SENDER_SEND_LOG_SYNC(
+        RAFT_MEMBER_SENDER, "send log sync", TIME_SCALE,
+        !ClusterDescriptor.getInstance().getConfig().isUseAsyncServer(),
+        RAFT_SENDER_SEND_LOG_TO_FOLLOWERS),
     RAFT_SENDER_SEND_LOG_ASYNC(
         RAFT_MEMBER_SENDER, "send log async", TIME_SCALE,
         ClusterDescriptor.getInstance().getConfig().isUseAsyncServer(),
         RAFT_SENDER_SEND_LOG_TO_FOLLOWERS),
-    RAFT_SENDER_SEND_LOG(
-        RAFT_MEMBER_SENDER, "send log", TIME_SCALE, true, RAFT_SENDER_SEND_LOG_TO_FOLLOWERS),
+    RAFT_SENDER_SEND_LOG_WRITE(
+        RAFT_MEMBER_SENDER, "send log write", TIME_SCALE, true, RAFT_SENDER_SEND_LOG_TO_FOLLOWERS),
+    RAFT_SENDER_SEND_LOG_READ(
+        RAFT_MEMBER_SENDER, "send log read", TIME_SCALE, true, RAFT_SENDER_SEND_LOG_TO_FOLLOWERS),
     RAFT_SENDER_VOTE_COUNTER(
         RAFT_MEMBER_SENDER, "wait for votes", TIME_SCALE, true,
         RaftMember.USE_LOG_DISPATCHER ? DATA_GROUP_MEMBER_LOCAL_EXECUTION

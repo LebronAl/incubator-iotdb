@@ -107,7 +107,7 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("java:S3077") // reference volatile is enough
 public abstract class RaftMember {
 
-  public static final boolean USE_LOG_DISPATCHER = false;
+  public static final boolean USE_LOG_DISPATCHER = true;
 
   private static final String MSG_FORWARD_TIMEOUT = "{}: Forward {} to {} time out";
   private static final String MSG_FORWARD_ERROR = "{}: encountered an error when forwarding {} to"
@@ -1646,7 +1646,9 @@ public abstract class RaftMember {
     if (ClusterDescriptor.getInstance().getConfig().isUseAsyncServer()) {
       sendLogAsync(log, voteCounter, node, leaderShipStale, newLeaderTerm, request, peer);
     } else {
+      startTime = Timer.Statistic.RAFT_SENDER_SEND_LOG_SYNC.getOperationStartTime();
       sendLogSync(log, voteCounter, node, leaderShipStale, newLeaderTerm, request, peer);
+      Timer.Statistic.RAFT_SENDER_SEND_LOG_SYNC.calOperationCostTimeFromStart(startTime);
     }
   }
 
